@@ -5,6 +5,7 @@
  * @see https://developer.wordpress.org/block-editor/reference-guides/packages/packages-block-editor/#useblockprops
  */
 import { useBlockProps } from '@wordpress/block-editor';
+import apiFetch from '@wordpress/api-fetch';
 
 /**
  * The save function defines the way in which the different attributes should
@@ -15,10 +16,25 @@ import { useBlockProps } from '@wordpress/block-editor';
  *
  * @return {WPElement} Element to render.
  */
-export default function save() {
-	return (
-		<p { ...useBlockProps.save() }>
-			{ 'Lorem Sized – hello from the saved content!' }
-		</p>
-	);
+
+ export async function save( { attributes } ) {
+    const blockProps = useBlockProps.save();
+	
+	const searchPostsByTitle = async (title) => {
+		try {
+			const start = Date.now();
+		  	const response = await apiFetch( { path: `/wp/v2/posts?search=${encodeURIComponent(title)}` } );
+			console.log( 'The request took ' + ( Date.now() - start ) + 'ms' );
+		  	return response;
+		} catch (error) {
+		  	console.error(error);
+		  	return null;
+		}
+	  };
+
+	const searchResult = await searchPostsByTitle(attributes.message);
+
+	return <div { ...blockProps }><pre>{ JSON.stringify(searchResult) }</pre></div>;
 }
+
+export default save;

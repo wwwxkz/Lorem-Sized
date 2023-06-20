@@ -16,5 +16,9 @@
 	},
 	"devDependencies": {
 		"@wordpress/scripts": "^26.6.0"
+	},
+	"dependencies": {
+		"@wordpress/api-fetch": "^6.32.0",
+		"@wordpress/components": "^25.1.0"
 	}
 }

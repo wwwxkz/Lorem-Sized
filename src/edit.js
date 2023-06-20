@@ -12,6 +12,7 @@ import { __ } from '@wordpress/i18n';
  * @see https://developer.wordpress.org/block-editor/reference-guides/packages/packages-block-editor/#useblockprops
  */
 import { useBlockProps } from '@wordpress/block-editor';
+import { TextControl } from '@wordpress/components';
 
 /**
  * Lets webpack process CSS, SASS or SCSS files referenced in JavaScript files.
@@ -29,10 +30,14 @@ import './editor.scss';
  *
  * @return {WPElement} Element to render.
  */
-export default function Edit() {
-	return (
-		<p { ...useBlockProps() }>
-			{ __( 'Lorem Sized – hello from the editor!', 'lorem-sized' ) }
-		</p>
-	);
+export default function Edit( { attributes, setAttributes } ) {
+    return (
+		<div { ...useBlockProps() }>
+			<TextControl
+				label={ __( 'Message', 'gutenpride' ) }
+				value={ attributes.message }
+				onChange={ ( val ) => setAttributes( { message: val } ) }
+			/>
+		</div>
+    );
 }
