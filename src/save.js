@@ -5,6 +5,7 @@
  * @see https://developer.wordpress.org/block-editor/reference-guides/packages/packages-block-editor/#useblockprops
  */
 import { useBlockProps } from '@wordpress/block-editor';
+import { TextControl } from '@wordpress/components';
 import apiFetch from '@wordpress/api-fetch';
 
 /**
@@ -34,7 +35,21 @@ import apiFetch from '@wordpress/api-fetch';
 
 	const searchResult = await searchPostsByTitle(attributes.message);
 
-	return <div { ...blockProps }><pre>{ JSON.stringify(searchResult) }</pre></div>;
+	return (
+		<div { ...useBlockProps() }>
+			{ attributes.message ? (
+				<pre>{ JSON.stringify(searchResult) }</pre>
+			) : (
+				<div>
+					<p>No Message.</p>
+					<TextControl
+						value={ attributes.message }
+						onChange={ ( val ) => setAttributes( { message: val } ) }
+					/>
+				</div>
+			) }
+		</div>
+	);
 }
 
 export default save;
